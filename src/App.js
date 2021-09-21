@@ -85,28 +85,35 @@ function App() {
   // "a403429f2ddf4b49b307e318f00e528b"
 
   const onButtonSubmit = () => {
-    setImgURL(input)      //set image to variable
+    setImgURL(input);      //set image to variable
     app.models
-    .predict(Clarifai.FACE_DETECT_MODEL, input)   //look for face within image w.API
-    .then(response => {     //clarifai provides a response
-      if (response) {       //if the response is received
-        fetch('http://localhost:3000/image', {    //fetch route of image
-          method: 'put',                     //ensuring method is PUT
-          headers: {'Content-Type': 'application/json'},  //clarifying header info
-          body: JSON.stringify({
-              id: user.id
-          })   
-        })
-        .then(response => response.json())
-        .then(count => {
-          setUser(
-            Object.assign(
-              user, {entries: count})
-          )
-        })
-      }
-      displayFaceBox(calculateFaceLocation(response))})
-    .catch(err => console.log("error", err));
+      .predict(Clarifai.FACE_DETECT_MODEL, input)   //look for face within image w.API
+    // fetch('http://localhost:3000/imageurl', {
+    //   method: 'post',
+    //   headers: {'Content-Type': 'application/json'},
+    //   body: JSON.stringify({
+    //     input: input
+    //   })
+    // })
+    // .then(response => response.json())
+      .then(response => {     //clarifai provides a response
+        if (response) {       //if the response is received
+          fetch('http://localhost:3000/image', {    //fetch route of image
+            method: 'put',                     //ensuring method is PUT
+            headers: {'Content-Type': 'application/json'},  //clarifying header info
+            body: JSON.stringify({
+                id: user.id,
+            })   
+          })
+          .then(response => response.json())
+          .then(count => {
+            setUser(prevState => ({           //code in course did not work with hooks
+                ...prevState, entries: count  //using ...prevState w.spread updates entries immediately
+            }))                               //by automatically merging update objects
+          })
+        }
+        displayFaceBox(calculateFaceLocation(response))})
+      .catch(err => console.log("error", err));
   }
 
   const onRouteChange = (route) => {
