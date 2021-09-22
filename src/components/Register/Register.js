@@ -14,7 +14,7 @@ const Register = ({ onRouteChange, loadUser }) => {
         setPassword(e.target.value);
     }
     const onSubmitRegistration = () => {              //when clicking submit
-        fetch('http://localHost:3000/register', { //fetching server API from localhost
+        fetch('https://floating-waters-88143.herokuapp.com/register', { //fetching server API from localhost
             method: 'post',                     //ensuring method is POST
             headers: {'Content-Type': 'application/json'},  //clarifying header info
             body: JSON.stringify({
@@ -25,7 +25,7 @@ const Register = ({ onRouteChange, loadUser }) => {
         })
         .then(res => res.json())
         .then(user => {
-            if (user) {
+            if (user.id) {          //user must have an id - else will be able to sign in without validation
                 loadUser(user)
                 onRouteChange('home');
             }

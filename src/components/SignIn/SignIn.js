@@ -10,7 +10,7 @@ const SignIn = ({ onRouteChange, loadUser }) => {
         setSignInPassword(e.target.value);
     }
     const onSubmitSignIn = () => {              //when clicking submit
-        fetch('http://localHost:3000/signin', { //fetching server API from localhost
+        fetch('https://floating-waters-88143.herokuapp.com/signin', { //fetching server API from localhost
             method: 'post',                     //ensuring method is POST
             headers: {'Content-Type': 'application/json'},  //clarifying header info
             body: JSON.stringify({
@@ -20,7 +20,7 @@ const SignIn = ({ onRouteChange, loadUser }) => {
         })
         .then(res => res.json())
         .then(user => {
-            if (user.id) {
+            if (user.id) {      //user must have an id
                 loadUser(user);
                 onRouteChange('home');
             }

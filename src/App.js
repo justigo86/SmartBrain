@@ -1,4 +1,4 @@
-import React, {useState, useEffect}from 'react';
+import React, {useState}from 'react';
 import './App.css';
 import Navigation from './components/Navigation/Navigation';
 import SignIn from './components/SignIn/SignIn';
@@ -9,7 +9,7 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import Particles from 'react-particles-js';
 import styled from 'styled-components';
-import Clarifai from 'clarifai';
+// import Clarifai from 'clarifai';
 
 const AppDiv = styled.div `
   text-align:center;
@@ -23,9 +23,9 @@ const AppDiv = styled.div `
   }
 `
 
-const app = new Clarifai.App({
-  apiKey: '4460d3f4e3da44c78375c06c03ed2d25'
- });
+// const app = new Clarifai.App({
+//   apiKey: ''
+//  });    //API key is vulnerability and needs to be moved to back-end for security
 
 function App() {
   const [input, setInput] = useState('');
@@ -39,7 +39,23 @@ function App() {
     email: '',
     entries: 0,
     joined: ''
-  })
+  });
+
+  const initialState = () => {
+    setInput('');
+    setImgURL('');
+    setBox({});
+    setRoute('signin');
+    setIsSignedIn(false);
+    setUser({
+      id: '',
+      name: '',
+      email: '',
+      entries: 0,
+      joined: ''
+    });
+  }
+
   /*
   useEffect(() => {               //useEffect used to fetch server API
     fetch('http://localhost:3000')  //bridge gap with backend using fetch to fetch server.js APT
@@ -86,19 +102,18 @@ function App() {
 
   const onButtonSubmit = () => {
     setImgURL(input);      //set image to variable
-    app.models
-      .predict(Clarifai.FACE_DETECT_MODEL, input)   //look for face within image w.API
-    // fetch('http://localhost:3000/imageurl', {
-    //   method: 'post',
-    //   headers: {'Content-Type': 'application/json'},
-    //   body: JSON.stringify({
-    //     input: input
-    //   })
-    // })
-    // .then(response => response.json())
+    //fetch added after moving API key to backend (image.js)
+    fetch('https://floating-waters-88143.herokuapp.com/imageurl', {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        input: input
+      })
+    })
+      .then(response => response.json())  //fetched data needs to be converted into JSON
       .then(response => {     //clarifai provides a response
         if (response) {       //if the response is received
-          fetch('http://localhost:3000/image', {    //fetch route of image
+          fetch('https://floating-waters-88143.herokuapp.com/image', {    //fetch route of image
             method: 'put',                     //ensuring method is PUT
             headers: {'Content-Type': 'application/json'},  //clarifying header info
             body: JSON.stringify({
@@ -111,14 +126,15 @@ function App() {
                 ...prevState, entries: count  //using ...prevState w.spread updates entries immediately
             }))                               //by automatically merging update objects
           })
+          .catch(err => console.log("error", err))
         }
         displayFaceBox(calculateFaceLocation(response))})
-      .catch(err => console.log("error", err));
+    .catch(err => console.log("error", err));
   }
 
   const onRouteChange = (route) => {
     if (route === 'signout') {
-      setIsSignedIn(false);
+      initialState();
     } else if (route === 'home') {
       setIsSignedIn(true);
     }
