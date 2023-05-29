@@ -1,18 +1,18 @@
-import React, {useState}from 'react';
-import './App.css';
-import Navigation from './components/Navigation/Navigation';
-import SignIn from './components/SignIn/SignIn';
-import Register from './components/Register/Register';
-import Logo from './components/Logo/Logo';
-import Rank from './components/Rank/Rank';
-import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
-import FaceRecognition from './components/FaceRecognition/FaceRecognition';
-import Particles from 'react-particles-js';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import "./App.css";
+import Navigation from "./components/Navigation/Navigation";
+import SignIn from "./components/SignIn/SignIn";
+import Register from "./components/Register/Register";
+import Logo from "./components/Logo/Logo";
+import Rank from "./components/Rank/Rank";
+import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm";
+import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
+import Particles from "react-particles-js";
+import styled from "styled-components";
 // import Clarifai from 'clarifai';
 
-const AppDiv = styled.div `
-  text-align:center;
+const AppDiv = styled.div`
+  text-align: center;
   & > .particles {
     position: fixed;
     top: 0;
@@ -21,40 +21,40 @@ const AppDiv = styled.div `
     left: 0;
     z-index: -1;
   }
-`
+`;
 
 // const app = new Clarifai.App({
 //   apiKey: ''
 //  });    //API key is vulnerability and needs to be moved to back-end for security
 
 function App() {
-  const [input, setInput] = useState('');
-  const [imgURL, setImgURL] = useState('');
+  const [input, setInput] = useState("");
+  const [imgURL, setImgURL] = useState("");
   const [box, setBox] = useState({});
-  const [route, setRoute] = useState('signin');
+  const [route, setRoute] = useState("signin");
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [user, setUser] = useState({
-    id: '',
-    name: '',
-    email: '',
+    id: "",
+    name: "",
+    email: "",
     entries: 0,
-    joined: ''
+    joined: "",
   });
 
   const initialState = () => {
-    setInput('');
-    setImgURL('');
+    setInput("");
+    setImgURL("");
     setBox({});
-    setRoute('signin');
+    setRoute("signin");
     setIsSignedIn(false);
     setUser({
-      id: '',
-      name: '',
-      email: '',
+      id: "",
+      name: "",
+      email: "",
       entries: 0,
-      joined: ''
+      joined: "",
     });
-  }
+  };
 
   /*
   useEffect(() => {               //useEffect used to fetch server API
@@ -70,30 +70,30 @@ function App() {
       name: data.name,
       email: data.email,
       entries: data.entries,
-      joined: data.joined
-    })
-  }
+      joined: data.joined,
+    });
+  };
 
   const calculateFaceLocation = (data) => {
     const face = data.outputs[0].data.regions[0].region_info.bounding_box;
-    const image = document.getElementById('inputimage');
+    const image = document.getElementById("inputimage");
     const width = image.width;
     const height = image.height;
     return {
       leftCol: face.left_col * width,
       topRow: face.top_row * height,
-      rightCol: width - (face.right_col * width),
-      bottomRow: height - (face.bottom_row * height)
-    }
-  }
+      rightCol: width - face.right_col * width,
+      bottomRow: height - face.bottom_row * height,
+    };
+  };
 
   const displayFaceBox = (box) => {
     setBox(box);
-  }
+  };
 
   const onInputChange = (e) => {
     setInput(e.target.value);
-  }
+  };
 
   // Clarifai.COLOR_MODEL
   // Clarifai.FACE_DETECT_MODEL
@@ -101,74 +101,84 @@ function App() {
   // "a403429f2ddf4b49b307e318f00e528b"
 
   const onButtonSubmit = () => {
-    setImgURL(input);      //set image to variable
+    setImgURL(input); //set image to variable
     //fetch added after moving API key to backend (image.js)
-    fetch('https://floating-waters-88143.herokuapp.com/imageurl', {
-      method: 'post',
-      headers: {'Content-Type': 'application/json'},
+    fetch("https://floating-waters-88143.herokuapp.com/imageurl", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        input: input
-      })
+        input: input,
+      }),
     })
-      .then(response => response.json())  //fetched data needs to be converted into JSON
-      .then(response => {     //clarifai provides a response
-        if (response) {       //if the response is received
-          fetch('https://floating-waters-88143.herokuapp.com/image', {    //fetch route of image
-            method: 'put',                     //ensuring method is PUT
-            headers: {'Content-Type': 'application/json'},  //clarifying header info
+      .then((response) => response.json()) //fetched data needs to be converted into JSON
+      .then((response) => {
+        //clarifai provides a response
+        if (response) {
+          //if the response is received
+          fetch("https://floating-waters-88143.herokuapp.com/image", {
+            //fetch route of image
+            method: "put", //ensuring method is PUT
+            headers: { "Content-Type": "application/json" }, //clarifying header info
             body: JSON.stringify({
-                id: user.id,
-            })   
+              id: user.id,
+            }),
           })
-          .then(response => response.json())
-          .then(count => {
-            setUser(prevState => ({           //code in course did not work with hooks
-                ...prevState, entries: count  //using ...prevState w.spread updates entries immediately
-            }))                               //by automatically merging update objects
-          })
-          .catch(err => console.log("error", err))
+            .then((response) => response.json())
+            .then((count) => {
+              setUser((prevState) => ({
+                //code in course did not work with hooks
+                ...prevState,
+                entries: count, //using ...prevState w.spread updates entries immediately
+              })); //by automatically merging update objects
+            })
+            .catch((err) => console.log("error", err));
         }
-        displayFaceBox(calculateFaceLocation(response))})
-    .catch(err => console.log("error", err));
-  }
+        displayFaceBox(calculateFaceLocation(response));
+      })
+      .catch((err) => console.log("error", err));
+  };
 
   const onRouteChange = (route) => {
-    if (route === 'signout') {
+    if (route === "signout") {
       initialState();
-    } else if (route === 'home') {
+    } else if (route === "home") {
       setIsSignedIn(true);
     }
     setRoute(route);
-  }
+  };
 
   return (
     <AppDiv className="App">
-      <Particles className="particles"
+      <Particles
+        className="particles"
         params={{
           particles: {
             number: {
               value: 30,
               density: {
                 enable: true,
-                value_area: 300
-              }
-            }
-          }
+                value_area: 300,
+              },
+            },
+          },
         }}
       />
       <Navigation isSignedIn={isSignedIn} onRouteChange={onRouteChange} />
-      { route === 'home' ? 
-        <div id='wrap-in-div-to-avoid-error'>
+      {route === "home" ? (
+        <div id="wrap-in-div-to-avoid-error">
           <Logo />
           <Rank name={user.name} entries={user.entries} />
-          <ImageLinkForm  onInputChange={onInputChange} onButtonSubmit={onButtonSubmit} />
+          <ImageLinkForm
+            onInputChange={onInputChange}
+            onButtonSubmit={onButtonSubmit}
+          />
           <FaceRecognition box={box} imgURL={imgURL} />
-        </div> :
-        (route === 'signin' ?
-        <SignIn loadUser={loadUser} onRouteChange={onRouteChange} /> :
+        </div>
+      ) : route === "signin" ? (
+        <SignIn loadUser={loadUser} onRouteChange={onRouteChange} />
+      ) : (
         <Register loadUser={loadUser} onRouteChange={onRouteChange} />
-        )
-      }
+      )}
     </AppDiv>
   );
 }
