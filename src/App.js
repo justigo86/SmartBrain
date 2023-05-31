@@ -9,7 +9,48 @@ import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm";
 import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
 import Particles from "react-particles-js";
 import styled from "styled-components";
-// import Clarifai from 'clarifai';
+import Clarifai from "clarifai";
+
+// const clarifaiRequest = (imgURL) => {
+//   // Your PAT (Personal Access Token) can be found in the portal under Authentification
+//   const PAT = "dfc62ad7090f4c5db9a89d0ff756090a";
+//   // Specify the correct user_id/app_id pairings
+//   // Since you're making inferences outside your app's scope
+//   const USER_ID = "justigo86";
+//   const APP_ID = "Face_Detection_API";
+//   // Change these to whatever model and image URL you want to use
+//   // const MODEL_ID = 'face-detection';
+//   const IMAGE_URL = imgURL;
+
+//   const raw = JSON.stringify({
+//     user_app_id: {
+//       user_id: USER_ID,
+//       app_id: APP_ID,
+//     },
+//     inputs: [
+//       {
+//         data: {
+//           image: {
+//             url: IMAGE_URL,
+//           },
+//         },
+//       },
+//     ],
+//   });
+
+//   return {
+//     method: "POST",
+//     headers: {
+//       Accept: "application/json",
+//       Authorization: "Key " + PAT,
+//     },
+//     body: raw,
+//   };
+// };
+
+// NOTE: MODEL_VERSION_ID is optional, you can also call prediction with the MODEL_ID only
+// https://api.clarifai.com/v2/models/{YOUR_MODEL_ID}/outputs
+// this will default to the latest version_id
 
 const AppDiv = styled.div`
   text-align: center;
@@ -23,9 +64,9 @@ const AppDiv = styled.div`
   }
 `;
 
-// const app = new Clarifai.App({
-//   apiKey: ''
-//  });    //API key is vulnerability and needs to be moved to back-end for security
+const app = new Clarifai.App({
+  apiKey: "4460d3f4e3da44c78375c06c03ed2d25",
+}); //API key is vulnerability and needs to be moved to back-end for security
 
 function App() {
   const [input, setInput] = useState("");
@@ -102,21 +143,29 @@ function App() {
 
   const onButtonSubmit = () => {
     setImgURL(input); //set image to variable
-    //fetch added after moving API key to backend (image.js)
-    fetch("https://floating-waters-88143.herokuapp.com/imageurl", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        input: input,
-      }),
-    })
-      .then((response) => response.json()) //fetched data needs to be converted into JSON
+    app.models
+      .predict(Clarifai.FACE_DETECT_MODEL, input) //look for face within image w.API
+      //fetch using
+      // fetch(
+      //   "https://api.clarifai.com/v2/models/face-detection/outputs",
+      //   clarifaiRequest(input)
+      // )
+      // .then((response) => response.json())
+      //fetch added after moving API key to backend (image.js)
+      // fetch('https://floating-waters-88143.herokuapp.com/imageurl', {
+      //   method: 'post',
+      //   headers: {'Content-Type': 'application/json'},
+      //   body: JSON.stringify({
+      //     input: input
+      //   })
+      // })
+      // .then((response) => response.json()) //fetched data needs to be converted into JSON
       .then((response) => {
         //clarifai provides a response
         if (response) {
           //if the response is received
-          fetch("https://floating-waters-88143.herokuapp.com/image", {
-            //fetch route of image
+          fetch("http://localhost:3000/image", {
+            // fetch('https://floating-waters-88143.herokuapp.com/image', {    //fetch route of image
             method: "put", //ensuring method is PUT
             headers: { "Content-Type": "application/json" }, //clarifying header info
             body: JSON.stringify({
@@ -140,6 +189,7 @@ function App() {
 
   const onRouteChange = (route) => {
     if (route === "signout") {
+      // setIsSignedIn(false);
       initialState();
     } else if (route === "home") {
       setIsSignedIn(true);
