@@ -4,15 +4,19 @@ const Register = ({ onRouteChange, loadUser }) => {
   const [name, setName] = useState("default");
   const [email, setEmail] = useState("default2");
   const [password, setPassword] = useState("default3");
+
   const onNameChange = (e) => {
     setName(e.target.value);
   };
+
   const onEmailChange = (e) => {
     setEmail(e.target.value);
   };
+
   const onPasswordChange = (e) => {
     setPassword(e.target.value);
   };
+
   const onSubmitRegistration = () => {
     fetch("http://localHost:3000/register", {
       //if using Heroku
@@ -35,6 +39,7 @@ const Register = ({ onRouteChange, loadUser }) => {
         }
       });
   };
+
   return (
     <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
       <main className="pa4 black-80">

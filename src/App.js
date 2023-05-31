@@ -145,7 +145,15 @@ function App() {
     setImgURL(input); //set image to variable
     app.models
       .predict(Clarifai.FACE_DETECT_MODEL, input) //look for face within image w.API
-      //fetch using
+      // fetch('http://localhost:3000/imageurl', {
+      //   method: 'post',
+      //   headers: {'Content-Type': 'application/json'},
+      //   body: JSON.stringify({
+      //     input: this.state.input
+      //   })
+      // })
+      // .then(response => response.json())
+      //fetch using clarifai image outputs
       // fetch(
       //   "https://api.clarifai.com/v2/models/face-detection/outputs",
       //   clarifaiRequest(input)

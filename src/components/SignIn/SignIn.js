@@ -3,12 +3,15 @@ import React, { useState } from "react";
 const SignIn = ({ onRouteChange, loadUser }) => {
   const [signInEmail, setSignInEmail] = useState("default");
   const [signInPassword, setSignInPassword] = useState("default2");
+
   const onEmailChange = (e) => {
     setSignInEmail(e.target.value);
   };
+
   const onPasswordChange = (e) => {
     setSignInPassword(e.target.value);
   };
+
   const onSubmitSignIn = () => {
     fetch("http://localHost:3000/signin", {
       //if using Heroku
@@ -30,6 +33,7 @@ const SignIn = ({ onRouteChange, loadUser }) => {
         }
       });
   };
+
   return (
     <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
       <main className="pa4 black-80">
