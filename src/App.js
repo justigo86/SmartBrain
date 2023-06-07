@@ -9,7 +9,7 @@ import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm";
 import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
 import Particles from "react-particles-js";
 import styled from "styled-components";
-import Clarifai from "clarifai";
+// import Clarifai from "clarifai";
 
 // const clarifaiRequest = (imgURL) => {
 //   // Your PAT (Personal Access Token) can be found in the portal under Authentification
@@ -64,9 +64,9 @@ const AppDiv = styled.div`
   }
 `;
 
-const app = new Clarifai.App({
-  apiKey: "4460d3f4e3da44c78375c06c03ed2d25",
-}); //API key is vulnerability and needs to be moved to back-end for security
+// const app = new Clarifai.App({
+//   apiKey: "",
+// }); //API key is vulnerability and needs to be moved to back-end for security
 
 function App() {
   const [input, setInput] = useState("");
@@ -143,37 +143,39 @@ function App() {
 
   const onButtonSubmit = () => {
     setImgURL(input); //set image to variable
-    app.models
-      .predict(Clarifai.FACE_DETECT_MODEL, input) //look for face within image w.API
-      // fetch('http://localhost:3000/imageurl', {
-      //   method: 'post',
-      //   headers: {'Content-Type': 'application/json'},
-      //   body: JSON.stringify({
-      //     input: this.state.input
-      //   })
-      // })
-      // .then(response => response.json())
-      //fetch using clarifai image outputs
-      // fetch(
-      //   "https://api.clarifai.com/v2/models/face-detection/outputs",
-      //   clarifaiRequest(input)
-      // )
-      // .then((response) => response.json())
-      //fetch added after moving API key to backend (image.js)
-      // fetch('https://floating-waters-88143.herokuapp.com/imageurl', {
-      //   method: 'post',
-      //   headers: {'Content-Type': 'application/json'},
-      //   body: JSON.stringify({
-      //     input: input
-      //   })
-      // })
-      // .then((response) => response.json()) //fetched data needs to be converted into JSON
+    // app.models
+    //   .predict(Clarifai.FACE_DETECT_MODEL, input) //look for face within image w.API
+    // fetch('http://localhost:3000/imageurl', {
+    //   method: 'post',
+    //   headers: {'Content-Type': 'application/json'},
+    //   body: JSON.stringify({
+    //     input: this.state.input
+    //   })
+    // })
+    // .then(response => response.json())
+    //fetch using clarifai image outputs
+    // fetch(
+    //   "https://api.clarifai.com/v2/models/face-detection/outputs",
+    //   clarifaiRequest(input)
+    // )
+    // .then((response) => response.json())
+    //fetch added after moving API key to backend (image.js)
+    // fetch('https://floating-waters-88143.herokuapp.com/imageurl', {
+    fetch("https://smartbrain-api-xi9j.onrender.com/imageurl", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        input: input,
+      }),
+    })
+      .then((response) => response.json()) //fetched data needs to be converted into JSON
       .then((response) => {
         //clarifai provides a response
         if (response) {
           //if the response is received
-          fetch("http://localhost:3000/image", {
-            // fetch('https://floating-waters-88143.herokuapp.com/image', {    //fetch route of image
+          // fetch("http://localhost:3000/image", {
+          // fetch('https://floating-waters-88143.herokuapp.com/image', {    //fetch route of image
+          fetch("https://smartbrain-api-xi9j.onrender.com/image", {
             method: "put", //ensuring method is PUT
             headers: { "Content-Type": "application/json" }, //clarifying header info
             body: JSON.stringify({

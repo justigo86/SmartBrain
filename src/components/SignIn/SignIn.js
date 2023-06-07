@@ -13,9 +13,11 @@ const SignIn = ({ onRouteChange, loadUser }) => {
   };
 
   const onSubmitSignIn = () => {
-    fetch("http://localHost:3000/signin", {
-      //if using Heroku
-      // fetch("https://floating-waters-88143.herokuapp.com/signin", {
+    // fetch("http://localHost:3000/signin", {
+    //if using Heroku
+    // fetch("https://floating-waters-88143.herokuapp.com/signin", {
+    //if using Render
+    fetch("https://smartbrain-api-xi9j.onrender.com/signin", {
       //fetching server API from localhost
       method: "post", //ensuring method is POST
       headers: { "Content-Type": "application/json" }, //clarifying header info
