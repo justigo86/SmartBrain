@@ -145,7 +145,8 @@ function App() {
     setImgURL(input); //set image to variable
     // app.models
     //   .predict(Clarifai.FACE_DETECT_MODEL, input) //look for face within image w.API
-    fetch("http://localhost:3000/imageurl", {
+    // fetch("http://localhost:3000/imageurl", {
+    fetch("http://localhost:10000/imageurl", {
       //fetch using clarifai image outputs
       // fetch(
       //   "https://api.clarifai.com/v2/models/face-detection/outputs",
@@ -165,7 +166,8 @@ function App() {
         //clarifai provides a response
         if (response) {
           //if the response is received
-          fetch("http://localhost:3000/image", {
+          // fetch("http://localhost:3000/image", {
+          fetch("http://localhost:10000/image", {
             // fetch('https://floating-waters-88143.herokuapp.com/image', {    //fetch route of image
             // fetch("https://smartbrain-api-xi9j.onrender.com/image", {
             method: "put", //ensuring method is PUT
