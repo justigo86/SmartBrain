@@ -18,12 +18,13 @@ const Register = ({ onRouteChange, loadUser }) => {
   };
 
   const onSubmitRegistration = () => {
-    // fetch("http://localHost:3000/register", {
-    //if using Heroku
-    // fetch("https://floating-waters-88143.herokuapp.com/register", {
-    //if using Render
-    fetch("https://smartbrain-api-xi9j.onrender.com/register", {
+    fetch("http://localHost:10000/register", {
+      //if using Heroku
+      // fetch("https://floating-waters-88143.herokuapp.com/register", {
+      //if using Render
+      // fetch("https://smartbrain-api-xi9j.onrender.com/register", {
       //fetching server API from localhost
+      // fetch("http://localHost:3000/register", {
       method: "post", //ensuring method is POST
       headers: { "Content-Type": "application/json" }, //clarifying header info
       body: JSON.stringify({

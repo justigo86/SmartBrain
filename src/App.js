@@ -145,23 +145,15 @@ function App() {
     setImgURL(input); //set image to variable
     // app.models
     //   .predict(Clarifai.FACE_DETECT_MODEL, input) //look for face within image w.API
-    // fetch('http://localhost:3000/imageurl', {
-    //   method: 'post',
-    //   headers: {'Content-Type': 'application/json'},
-    //   body: JSON.stringify({
-    //     input: this.state.input
-    //   })
-    // })
-    // .then(response => response.json())
-    //fetch using clarifai image outputs
-    // fetch(
-    //   "https://api.clarifai.com/v2/models/face-detection/outputs",
-    //   clarifaiRequest(input)
-    // )
-    // .then((response) => response.json())
-    //fetch added after moving API key to backend (image.js)
-    // fetch('https://floating-waters-88143.herokuapp.com/imageurl', {
-    fetch("https://smartbrain-api-xi9j.onrender.com/imageurl", {
+    fetch("http://localhost:3000/imageurl", {
+      //fetch using clarifai image outputs
+      // fetch(
+      //   "https://api.clarifai.com/v2/models/face-detection/outputs",
+      //   clarifaiRequest(input)
+      // )
+      //fetch added after moving API key to backend (image.js)
+      // fetch('https://floating-waters-88143.herokuapp.com/imageurl', {
+      // fetch("https://smartbrain-api-xi9j.onrender.com/imageurl", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -173,9 +165,9 @@ function App() {
         //clarifai provides a response
         if (response) {
           //if the response is received
-          // fetch("http://localhost:3000/image", {
-          // fetch('https://floating-waters-88143.herokuapp.com/image', {    //fetch route of image
-          fetch("https://smartbrain-api-xi9j.onrender.com/image", {
+          fetch("http://localhost:3000/image", {
+            // fetch('https://floating-waters-88143.herokuapp.com/image', {    //fetch route of image
+            // fetch("https://smartbrain-api-xi9j.onrender.com/image", {
             method: "put", //ensuring method is PUT
             headers: { "Content-Type": "application/json" }, //clarifying header info
             body: JSON.stringify({
